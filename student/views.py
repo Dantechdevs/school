@@ -1,11 +1,13 @@
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Parent, Student, Notification  # Ensure you import your models
+from .models import *
 from django.contrib import messages
+from .models import Student, Parent, Notification
 
-# Function to create a notification
 def create_notification(user, message):
     Notification.objects.create(user=user, message=message)
+
+# Create your views here.
 
 def add_student(request):
     if request.method == "POST":
@@ -34,7 +36,7 @@ def add_student(request):
         present_address = request.POST.get('present_address')
         permanent_address = request.POST.get('permanent_address')
 
-        # Save parent information
+        # save parent information
         parent = Parent.objects.create(
             father_name=father_name,
             father_occupation=father_occupation,
@@ -64,12 +66,13 @@ def add_student(request):
             student_image=student_image,
             parent=parent
         )
-        
-        create_notification(request.user, f"Added Student: {student.first_name} {student.last_name}")
-        messages.success(request, "Student added Successfully")
-        return redirect("student_list")  # Redirect to the student list after adding
+        if request.user.is_authenticated:
+            create_notification(request.user, f"Added Student: {student.first_name} {student.last_name}")
+            messages.success(request, "Student added successfully")
+            return redirect("student_list")
 
     return render(request, "students/add-student.html")
+
 
 def student_list(request):
     student_list = Student.objects.select_related('parent').all()
@@ -79,6 +82,7 @@ def student_list(request):
         'unread_notification': unread_notification
     }
     return render(request, "students/students.html", context)
+
 
 def edit_student(request, slug):
     student = get_object_or_404(Student, slug=slug)
@@ -97,7 +101,7 @@ def edit_student(request, slug):
         section = request.POST.get('section')
         student_image = request.FILES.get('student_image') if request.FILES.get('student_image') else student.student_image
 
-        # Update parent information
+        # Retrieve parent data from the form
         parent.father_name = request.POST.get('father_name')
         parent.father_occupation = request.POST.get('father_occupation')
         parent.father_mobile = request.POST.get('father_mobile')
@@ -110,7 +114,7 @@ def edit_student(request, slug):
         parent.permanent_address = request.POST.get('permanent_address')
         parent.save()
 
-        # Update student information
+        # update student information
         student.first_name = first_name
         student.last_name = last_name
         student.student_id = student_id
@@ -124,12 +128,12 @@ def edit_student(request, slug):
         student.section = section
         student.student_image = student_image
         student.save()
-        
         create_notification(request.user, f"Updated Student: {student.first_name} {student.last_name}")
-        
+        messages.success(request, "Student updated successfully")
         return redirect("student_list")
-    
+
     return render(request, "students/edit-student.html", {'student': student, 'parent': parent})
+
 
 def view_student(request, slug):
     student = get_object_or_404(Student, student_id=slug)
@@ -138,11 +142,14 @@ def view_student(request, slug):
     }
     return render(request, "students/student-details.html", context)
 
+
 def delete_student(request, slug):
     if request.method == "POST":
         student = get_object_or_404(Student, slug=slug)
         student_name = f"{student.first_name} {student.last_name}"
         student.delete()
-        create_notification(request.user, f"Deleted student: {student_name}")
-        return redirect('student_list')
+        if request.user.is_authenticated:
+            create_notification(request.user, f"Deleted student: {student_name}")
+            messages.success(request, "Student deleted successfully")
+            return redirect('student_list')
     return HttpResponseForbidden()
