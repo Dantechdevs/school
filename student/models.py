@@ -1,9 +1,5 @@
 from django.db import models
 from django.utils.text import slugify
-from django.utils.crypto import get_random_string
-# Create your models here.
-
-from django.db import models
 
 class Parent(models.Model):
     father_name = models.CharField(max_length=100)
@@ -40,5 +36,15 @@ class Student(models.Model):
         if not self.slug:
             self.slug = slugify(f"{self.first_name}-{self.last_name}-{self.student_id}")
         super(Student, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.student_id})"
+
+class Notification(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  # Assuming you're using Django's built-in User model
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message[:20]}..."
