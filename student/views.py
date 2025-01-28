@@ -84,6 +84,9 @@ def student_list(request):
     return render(request, "students/students.html", context)
 
 
+
+
+
 def edit_student(request, slug):
     student = get_object_or_404(Student, slug=slug)
     parent = student.parent if hasattr(student, 'parent') else None
