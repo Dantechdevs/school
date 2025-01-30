@@ -24,8 +24,14 @@
 <div class="about-info">
 <h4>About Me</h4>
 <div class="media mt-3">
-<img src="{{student.student_image.url}}" class="mr-3" alt="...">
-<div class="media-body">
+    {% if student.student_image %}
+        <img src="{{ student.student_image.url }}" alt="Image" class="mr-3">
+    {% else %}
+        <img src="/static/assets/img/students/default.jpg" alt="Default Image" class="mr-3">
+    {% endif %}
+    <div class="media-body">
+        <!-- Additional content here -->
+</div>
 <ul>
 <li>
 <span class="title-span">Full Name : </span>
