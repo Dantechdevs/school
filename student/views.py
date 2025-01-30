@@ -81,11 +81,19 @@ def add_student(request):
 
 def student_list(request):
     student_list = Student.objects.select_related("parent").all()
-    unread_notification = request.user.notification_set.filter(is_read=False)
-    context = {"student_list": student_list, "unread_notification": unread_notification}
+    
+    # Check if the user is authenticated before accessing notifications
+    if request.user.is_authenticated:
+        unread_notification = request.user.notification_set.filter(is_read=False)
+    else:
+        unread_notification = []  # Handle anonymous users as needed
+
+    context = {
+        "student_list": student_list,
+        "unread_notification": unread_notification
+    }
+    
     return render(request, "students/students.html", context)
-
-
 def edit_student(request, slug):
     student = get_object_or_404(Student, slug=slug)
     parent = student.parent if hasattr(student, "parent") else None
