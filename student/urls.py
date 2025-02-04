@@ -7,4 +7,5 @@ urlpatterns = [
     
     path('edit/<slug:slug>/', views.edit_student, name='edit_student'),
     path('delete/<slug:slug>/', views.delete_student, name='delete_student'),
+    
 ]
