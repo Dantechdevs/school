@@ -17,6 +17,6 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ftp.dantechdevelopers.com
-          username: myFtpUserName
-          password: ${{ secrets.ftp_password }}
+          username: school@dantechdevelopers.com # Your actual FTP username
+          password: ${{ secrets.ftp_password }} # Reference the secret correctly
           server-dir: /school/
