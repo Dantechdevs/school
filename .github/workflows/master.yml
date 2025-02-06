@@ -20,3 +20,4 @@ jobs:
           username: school@dantechdevelopers.com # Your actual FTP username
           password: ${{ secrets.ftp_password }} # Reference the secret correctly
           server-dir: /school/
+#success deployment
