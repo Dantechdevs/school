@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'school',
-    'student'
+    'student',
+    'home_auth'
     
 ]
 
