@@ -1,7 +1,8 @@
-"""Home URL Configuration
+"""
+URL configuration for Home project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
+    https://docs.djangoproject.com/en/5.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,14 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
-from . views import *
-urlpatterns = [
-    path('signup/', signup_view, name='signup'),
-    path('login/', login_view, name='login'),
-    # path('forgot-password/', forgot_password_view, name='forgot-password'),
-    # path('reset-password/<str:token>/', reset_password_view, name='reset-password'),
-    # path('logout/', logout_view, name='logout'),
+from django.conf.urls.static import static  # Corrected import
+from django.conf import settings
+from django.urls import path, include
 
+urlpatterns = []
 
-]
+# Add static and media URL configurations
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
