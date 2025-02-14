@@ -18,8 +18,16 @@ from django.contrib import admin
 from django.conf.urls.static import static  # Corrected import
 from django.conf import settings
 from django.urls import path, include
+from .views import*
 
-urlpatterns = []
+urlpatterns = [
+    path('signup/', signup_view, name='signup'),
+    path('login/', login_view, name='login'),
+    path('forgot-password/', forgot_password_view, name='forgot-password'),
+    path('reset-password/<str:token>/', reset_password_view, name='reset-password'),
+    path('logout/', logout_view, name='logout'),
+    
+]
 
 # Add static and media URL configurations
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
