@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings  # Added for user model reference
 
 class Parent(models.Model):
     father_name = models.CharField(max_length=100)
@@ -19,14 +20,18 @@ class Parent(models.Model):
 class Student(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    student_id = models.CharField(max_length=20, unique=True)  # Ensure student_id is unique
-    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others')])
+    student_id = models.CharField(max_length=20, unique=True)
+    gender = models.CharField(max_length=10, choices=[
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Others', 'Others')
+    ])
     date_of_birth = models.DateField()
     student_class = models.CharField(max_length=50)
     religion = models.CharField(max_length=50)
     joining_date = models.DateField()
     mobile_number = models.CharField(max_length=15)
-    admission_number = models.CharField(max_length=20, unique=True)  # Ensure admission_number is unique
+    admission_number = models.CharField(max_length=20, unique=True)
     section = models.CharField(max_length=10)
     student_image = models.ImageField(default="default.jpg", upload_to="student_images")
     parent = models.OneToOneField(Parent, on_delete=models.CASCADE)
@@ -47,7 +52,11 @@ class Student(models.Model):
         return f"{self.first_name} {self.last_name} ({self.student_id})"
 
 class Notification(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)  # Assuming you're using Django's built-in User model
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='student_notifications'  # Added related_name
+    )
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
