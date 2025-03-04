@@ -46,6 +46,9 @@ student_management_system/
 ├── classes/                # App managing class schedules and attendance
 └── templates/              # HTML templates
 ```
+## **Login**
+<img width="638" alt="Image" src="https://github.com/user-attachments/assets/8514ad9a-29e8-478c-a999-35b9c28e1c9b" />
+
 
 ## **Installation**
 Follow the steps below to get the project up and running on your local machine:
